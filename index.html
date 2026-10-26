@@ -21,10 +21,178 @@
 <section class="panel"><label for="prompt">Israfil AI-কে কী বলতে চাও?</label><textarea id="prompt" placeholder="যেমন: আমার বসকে একটি ভদ্র ইংরেজি ইমেইল লিখে দাও"></textarea><div class="actions"><button type="button" id="voice" class="secondary">🎙️ কথা বলুন</button><button type="button" id="copy">📋 কপি করুন</button><button type="button" id="ask">✨ ChatGPT-তে যান</button></div><div id="status" role="status" aria-live="polite"></div></section>
 <p class="note">গোপনীয়তা: এই অ্যাপ কোনো ইমেইল বা মেসেজ নিজে পড়ে না, পাঠায় না বা সংরক্ষণ করে না। Gmail, WhatsApp ও Facebook শুধু আলাদা ওয়েবসাইট হিসেবে খুলবে। ChatGPT-তে প্রশ্ন দিতে চাইলে আগে কপি করে সেখানে পেস্ট করো। Voice Input ব্রাউজার সমর্থন করলে কাজ করবে; iPhone Safari-তে নাও করতে পারে।</p>
 </main>
+
+
 <script>
-const promptBox=document.getElementById('prompt'),status=document.getElementById('status');
-document.getElementById('copy').onclick=async()=>{if(!promptBox.value.trim()){status.textContent='আগে কিছু লিখুন।';return}try{await navigator.clipboard.writeText(promptBox.value);status.textContent='কপি হয়েছে। ChatGPT-তে পেস্ট করুন।'}catch(e){promptBox.select();status.textContent='টেক্সট সিলেক্ট করা হয়েছে—Copy করুন।'}};
-document.getElementById('ask').onclick=()=>{window.open('https://chatgpt.com/','_blank','noopener,noreferrer');status.textContent='ChatGPT খুলেছে। এখানে লেখা কপি করে সেখানে পেস্ট করুন।'};
-const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-const voice=document.getElementById('voice');if(!SpeechRecognition){voice.disabled=true;voice.title='এই ব্রাউজারে Voice Input সমর্থিত নয়';status.textContent='এই ব্রাউজারে Voice Input নেই; iPhone কিবোর্ডের মাইক্রোফোন ব্যবহার করুন।'}else{voice.onclick=()=>{try{const rec=new SpeechRecognition();rec.lang='bn-BD';rec.interimResults=false;rec.onresult=e=>{promptBox.value+=(promptBox.value?' ':'')+e.results[0][0].transcript;status.textContent='কথা লেখা হয়েছে।'};rec.onerror=e=>status.textContent='ভয়েস ইনপুট কাজ করেনি: '+e.error;rec.start();status.textContent='শুনছি…'}catch(e){status.textContent='ভয়েস চালু করা যায়নি।'}}}
+
+const WORKER_URL = 'https://srafil-ai-chat.israfilh1345.workers.dev/';
+
+const promptBox = document.getElementById('prompt');
+
+const status = document.getElementById('status');
+
+const askButton = document.getElementById('ask');
+
+askButton.textContent = '✨ Israfil AI-কে জিজ্ঞেস করুন';
+
+const answerBox = document.createElement('div');
+
+answerBox.style.cssText = 'white-space:pre-wrap;line-height:1.7;margin-top:16px;overflow-wrap:anywhere';
+
+answerBox.setAttribute('aria-live', 'polite');
+
+status.insertAdjacentElement('afterend', answerBox);
+
+document.getElementById('copy').onclick = async () => {
+
+  if (!promptBox.value.trim()) {
+
+    status.textContent = 'আগে কিছু লিখুন।';
+
+    return;
+
+  }
+
+  try {
+
+    await navigator.clipboard.writeText(promptBox.value);
+
+    status.textContent = 'প্রশ্ন কপি হয়েছে।';
+
+  } catch {
+
+    promptBox.select();
+
+    status.textContent = 'লেখাটি সিলেক্ট হয়েছে। Copy করুন।';
+
+  }
+
+};
+
+askButton.onclick = async () => {
+
+  const message = promptBox.value.trim();
+
+  if (!message) {
+
+    status.textContent = 'আগে প্রশ্ন লিখুন।';
+
+    return;
+
+  }
+
+  const password = window.prompt('Israfil AI App Password লিখুন:');
+
+  if (password === null) return;
+
+  askButton.disabled = true;
+
+  status.textContent = 'AI উত্তর তৈরি করছে…';
+
+  answerBox.textContent = '';
+
+  try {
+
+    const response = await fetch(WORKER_URL, {
+
+      method: 'POST',
+
+      headers: {
+
+        'Content-Type': 'application/json',
+
+        'Authorization': 'Bearer ' + password
+
+      },
+
+      body: JSON.stringify({message})
+
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+
+      throw new Error(data.error || 'Server error: ' + response.status);
+
+    }
+
+    const answer = data.reply ?? data.response ?? data.answer ?? data.text;
+
+    if (typeof answer !== 'string') {
+
+      throw new Error('Server-এর উত্তর ফরম্যাট মেলেনি।');
+
+    }
+
+    answerBox.textContent = answer;
+
+    status.textContent = 'উত্তর পাওয়া গেছে।';
+
+  } catch (error) {
+
+    status.textContent = 'সমস্যা: ' + error.message;
+
+  } finally {
+
+    askButton.disabled = false;
+
+  }
+
+};
+
+const SpeechRecognition =
+
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const voice = document.getElementById('voice');
+
+if (!SpeechRecognition) {
+
+  voice.disabled = true;
+
+  voice.title = 'Voice Input সমর্থিত নয়';
+
+} else {
+
+  voice.onclick = () => {
+
+    try {
+
+      const rec = new SpeechRecognition();
+
+      rec.lang = 'bn-BD';
+
+      rec.interimResults = false;
+
+      rec.onresult = e => {
+
+        promptBox.value +=
+
+          (promptBox.value ? ' ' : '') + e.results[0][0].transcript;
+
+        status.textContent = 'কথা লেখা হয়েছে।';
+
+      };
+
+      rec.onerror = e => {
+
+        status.textContent = 'ভয়েস সমস্যা: ' + e.error;
+
+      };
+
+      rec.start();
+
+      status.textContent = 'শুনছি…';
+
+    } catch {
+
+      status.textContent = 'ভয়েস চালু করা যায়নি।';
+
+    }
+
+  };
+
+}
+
 </script></body></html>
