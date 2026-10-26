@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Israfil AI">
+<title>Israfil AI</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#eef4ff;background:#0b1220}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(155deg,#101c35,#0b1220 55%)}main{max-width:640px;margin:auto;padding:24px 18px 38px}.top{display:flex;align-items:center;gap:14px;margin-bottom:28px}.logo{background:#263d70;border:1px solid #5070ac;border-radius:19px;width:60px;height:60px;display:grid;place-items:center;font-size:30px}h1{font-size:25px;margin:0}small,.muted{color:#aabbd4}.hero{padding:23px;background:#182640;border:1px solid #304364;border-radius:24px;line-height:1.65}.hero h2{font-size:20px;margin:0 0 8px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0}.tile{display:block;text-decoration:none;color:#edf4ff;background:#182640;border:1px solid #304364;padding:18px 14px;border-radius:18px;font-size:15px}.tile span{display:block;font-size:26px;margin-bottom:8px}.panel{background:#152138;border:1px solid #304364;padding:17px;border-radius:20px}label{display:block;font-weight:650;margin-bottom:10px}textarea{width:100%;height:105px;resize:vertical;border:1px solid #526582;border-radius:13px;padding:12px;background:#0b1426;color:white;font:inherit}button{background:#4f87f8;color:white;border:0;border-radius:13px;padding:13px 16px;font:inherit;font-weight:650;cursor:pointer}button.secondary{background:#2d4162}button:disabled{opacity:.5}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:11px}.note{font-size:13px;color:#b7c7df;line-height:1.65;margin-top:18px}a{color:#9dc0ff}#status{min-height:20px;font-size:13px;color:#b7c7df;margin-top:10px}
+</style>
+</head>
+<body><main>
+<header class="top"><div class="logo">✦</div><div><h1>Israfil AI</h1><small>Your Personal Assistant · Starter</small></div></header>
+<section class="hero"><h2>আসসালামু আলাইকুম! 👋</h2><div>আমি তোমার Israfil AI-এর প্রথম সংস্করণ। এখানে বাংলায় লিখতে বা মাইক্রোফোন ব্যবহার করতে পারো। AI উত্তর পেতে ChatGPT খুলবে।</div></section>
+<nav class="grid" aria-label="Quick links">
+<a class="tile" href="https://mail.google.com/" target="_blank" rel="noopener noreferrer"><span>✉️</span>Gmail খুলুন</a>
+<a class="tile" href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer"><span>💬</span>WhatsApp Web</a>
+<a class="tile" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><span>🌐</span>Facebook খুলুন</a>
+<a class="tile" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer"><span>✨</span>ChatGPT খুলুন</a>
+</nav>
+<section class="panel"><label for="prompt">Israfil AI-কে কী বলতে চাও?</label><textarea id="prompt" placeholder="যেমন: আমার বসকে একটি ভদ্র ইংরেজি ইমেইল লিখে দাও"></textarea><div class="actions"><button type="button" id="voice" class="secondary">🎙️ কথা বলুন</button><button type="button" id="copy">📋 কপি করুন</button><button type="button" id="ask">✨ ChatGPT-তে যান</button></div><div id="status" role="status" aria-live="polite"></div></section>
+<p class="note">গোপনীয়তা: এই অ্যাপ কোনো ইমেইল বা মেসেজ নিজে পড়ে না, পাঠায় না বা সংরক্ষণ করে না। Gmail, WhatsApp ও Facebook শুধু আলাদা ওয়েবসাইট হিসেবে খুলবে। ChatGPT-তে প্রশ্ন দিতে চাইলে আগে কপি করে সেখানে পেস্ট করো। Voice Input ব্রাউজার সমর্থন করলে কাজ করবে; iPhone Safari-তে নাও করতে পারে।</p>
+</main>
+<script>
+const promptBox=document.getElementById('prompt'),status=document.getElementById('status');
+document.getElementById('copy').onclick=async()=>{if(!promptBox.value.trim()){status.textContent='আগে কিছু লিখুন।';return}try{await navigator.clipboard.writeText(promptBox.value);status.textContent='কপি হয়েছে। ChatGPT-তে পেস্ট করুন।'}catch(e){promptBox.select();status.textContent='টেক্সট সিলেক্ট করা হয়েছে—Copy করুন।'}};
+document.getElementById('ask').onclick=()=>{window.open('https://chatgpt.com/','_blank','noopener,noreferrer');status.textContent='ChatGPT খুলেছে। এখানে লেখা কপি করে সেখানে পেস্ট করুন।'};
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+const voice=document.getElementById('voice');if(!SpeechRecognition){voice.disabled=true;voice.title='এই ব্রাউজারে Voice Input সমর্থিত নয়';status.textContent='এই ব্রাউজারে Voice Input নেই; iPhone কিবোর্ডের মাইক্রোফোন ব্যবহার করুন।'}else{voice.onclick=()=>{try{const rec=new SpeechRecognition();rec.lang='bn-BD';rec.interimResults=false;rec.onresult=e=>{promptBox.value+=(promptBox.value?' ':'')+e.results[0][0].transcript;status.textContent='কথা লেখা হয়েছে।'};rec.onerror=e=>status.textContent='ভয়েস ইনপুট কাজ করেনি: '+e.error;rec.start();status.textContent='শুনছি…'}catch(e){status.textContent='ভয়েস চালু করা যায়নি।'}}}
+</script></body></html>
