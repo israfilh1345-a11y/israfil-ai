@@ -69,77 +69,54 @@ document.getElementById('copy').onclick = async () => {
 
 };
 
-askButton.onclick = async () => {
 
+askButton.onclick = async () => {
   const message = promptBox.value.trim();
 
   if (!message) {
-
     status.textContent = 'আগে প্রশ্ন লিখুন।';
-
     return;
-
   }
 
   const password = window.prompt('Israfil AI App Password লিখুন:');
-
   if (password === null) return;
 
   askButton.disabled = true;
-
   status.textContent = 'AI উত্তর তৈরি করছে…';
-
   answerBox.textContent = '';
 
   try {
-
-    const response = await fetch(WORKER_URL, {
-
+    const response = await fetch(WORKER_URL.replace(/\/$/, '') + '/api/chat', {
       method: 'POST',
-
       headers: {
-
         'Content-Type': 'application/json',
-
-        'Authorization': 'Bearer ' + password
-
+        'X-App-Password': password
       },
-
-      body: JSON.stringify({message})
-
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: message }]
+      })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-
       throw new Error(data.error || 'Server error: ' + response.status);
-
     }
 
-    const answer = data.reply ?? data.response ?? data.answer ?? data.text;
-
-    if (typeof answer !== 'string') {
-
+    if (typeof data.reply !== 'string') {
       throw new Error('Server-এর উত্তর ফরম্যাট মেলেনি।');
-
     }
 
-    answerBox.textContent = answer;
-
+    answerBox.textContent = data.reply;
     status.textContent = 'উত্তর পাওয়া গেছে।';
 
   } catch (error) {
-
     status.textContent = 'সমস্যা: ' + error.message;
-
   } finally {
-
     askButton.disabled = false;
-
   }
-
 };
+
 
 const SpeechRecognition =
 
