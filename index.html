@@ -1,175 +1,59 @@
 <!doctype html>
 <html lang="bn">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1220"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Israfil AI">
-<title>Israfil AI</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071324">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Israfil JARVIS">
 <link rel="manifest" href="manifest.webmanifest">
+<title>Israfil JARVIS AI</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#eef4ff;background:#0b1220}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(155deg,#101c35,#0b1220 55%)}main{max-width:640px;margin:auto;padding:24px 18px 38px}.top{display:flex;align-items:center;gap:14px;margin-bottom:28px}.logo{background:#263d70;border:1px solid #5070ac;border-radius:19px;width:60px;height:60px;display:grid;place-items:center;font-size:30px}h1{font-size:25px;margin:0}small,.muted{color:#aabbd4}.hero{padding:23px;background:#182640;border:1px solid #304364;border-radius:24px;line-height:1.65}.hero h2{font-size:20px;margin:0 0 8px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0}.tile{display:block;text-decoration:none;color:#edf4ff;background:#182640;border:1px solid #304364;padding:18px 14px;border-radius:18px;font-size:15px}.tile span{display:block;font-size:26px;margin-bottom:8px}.panel{background:#152138;border:1px solid #304364;padding:17px;border-radius:20px}label{display:block;font-weight:650;margin-bottom:10px}textarea{width:100%;height:105px;resize:vertical;border:1px solid #526582;border-radius:13px;padding:12px;background:#0b1426;color:white;font:inherit}button{background:#4f87f8;color:white;border:0;border-radius:13px;padding:13px 16px;font:inherit;font-weight:650;cursor:pointer}button.secondary{background:#2d4162}button:disabled{opacity:.5}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:11px}.note{font-size:13px;color:#b7c7df;line-height:1.65;margin-top:18px}a{color:#9dc0ff}#status{min-height:20px;font-size:13px;color:#b7c7df;margin-top:10px}
+:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#071324;color:#ecf7ff}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:radial-gradient(circle at 80% 0%,#123c63 0,transparent 38%),linear-gradient(160deg,#091c32,#071324 65%)}.shell{max-width:1100px;margin:auto;padding:20px 16px 50px}.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:12px}.mark{height:52px;width:52px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(145deg,#00d4ff,#2563eb);color:#001a31;font-size:28px;font-weight:900;box-shadow:0 0 26px #00bfff55}h1{font-size:22px;letter-spacing:1px;margin:0}.sub{font-size:12px;color:#9ebbd4;margin-top:4px}.live{display:flex;align-items:center;gap:7px;color:#9fffd3;font-size:12px;border:1px solid #1c6a69;background:#0a3235;border-radius:50px;padding:9px 12px}.dot{height:7px;width:7px;border-radius:50%;background:#45efb3;box-shadow:0 0 12px #45efb3}.layout{display:grid;grid-template-columns:1.35fr .85fr;gap:16px}.panel{border:1px solid #274a68;border-radius:22px;background:linear-gradient(155deg,#102b47ed,#0b1d32ed);padding:20px;box-shadow:0 10px 35px #0003}.eyebrow{color:#68dfff;font-size:11px;font-weight:800;letter-spacing:2px}.welcome h2{font-size:clamp(23px,4vw,36px);margin:12px 0 8px}.muted{color:#a4bfd4;line-height:1.6}.clock{font-size:35px;font-weight:800;letter-spacing:1px;margin:14px 0 3px;font-variant-numeric:tabular-nums}.date{color:#a4bfd4;font-size:13px}.orb{width:122px;height:122px;margin:14px auto;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#0a2c52 30%,#0573aa 55%,#0c2e50 62%,transparent 65%);border:1px solid #19b8e8;box-shadow:0 0 45px #00c8ff55,inset 0 0 35px #00c8ff66;font-size:40px}.center{text-align:center}.section-title{font-size:15px;margin:0 0 14px;letter-spacing:.5px}.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:16px}.app{border:1px solid #29506f;background:#102e4b;border-radius:16px;padding:16px 9px;text-decoration:none;color:#ecf7ff;text-align:center;font-size:13px}.app span{display:block;font-size:27px;margin-bottom:8px}.app:hover{border-color:#35c9ff}.chat{grid-column:1 / -1}.messages{min-height:145px;max-height:350px;overflow-y:auto;background:#071a2d;border:1px solid #224764;border-radius:15px;padding:13px;margin:12px 0;display:flex;flex-direction:column;gap:10px}.bubble{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;padding:11px 13px;border-radius:14px;max-width:95%;font-size:14px}.bubble.user{background:#174c74;align-self:flex-end}.bubble.ai{background:#153047;align-self:flex-start;border:1px solid #24516d}.bubble.system{background:#12293e;color:#b3c9d9;align-self:center;text-align:center;font-size:12px}label{display:block;font-size:13px;font-weight:700;margin-bottom:9px}textarea{width:100%;min-height:90px;resize:vertical;border-radius:13px;border:1px solid #315d7b;background:#081a2c;color:#fff;font:inherit;padding:13px;outline:none}textarea:focus{border-color:#29c6fa}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:11px}button{border:0;border-radius:12px;background:linear-gradient(125deg,#04aee6,#2563eb);color:white;padding:12px 15px;font:inherit;font-weight:700;cursor:pointer}button.secondary{background:#1a3954;border:1px solid #305977}button:disabled{opacity:.5;cursor:not-allowed}#status{min-height:20px;color:#a4bfd4;font-size:12px;margin-top:12px}.note{font-size:12px;line-height:1.7;color:#91acc4;margin-top:18px}.pill{display:inline-block;border:1px solid #295c7a;border-radius:50px;padding:7px 11px;font-size:12px;color:#8edfff;margin-top:10px}@media(max-width:680px){.layout{grid-template-columns:1fr}.apps{grid-template-columns:repeat(2,1fr)}.shell{padding:16px 13px 35px}.panel{padding:17px}.header{align-items:flex-start}.live{font-size:10px;padding:7px 9px}.mark{width:46px;height:46px}h1{font-size:19px}}
 </style>
 </head>
-<body><main>
-<header class="top"><div class="logo">✦</div><div><h1>Israfil AI</h1><small>Your Personal Assistant · Starter</small></div></header>
-<section class="hero"><h2>আসসালামু আলাইকুম! 👋</h2><div>আমি তোমার Israfil AI-এর প্রথম সংস্করণ। এখানে বাংলায় লিখতে বা মাইক্রোফোন ব্যবহার করতে পারো। AI উত্তর পেতে ChatGPT খুলবে।</div></section>
-<nav class="grid" aria-label="Quick links">
-<a class="tile" href="https://mail.google.com/" target="_blank" rel="noopener noreferrer"><span>✉️</span>Gmail খুলুন</a>
-<a class="tile" href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer"><span>💬</span>WhatsApp Web</a>
-<a class="tile" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><span>🌐</span>Facebook খুলুন</a>
-<a class="tile" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer"><span>✨</span>ChatGPT খুলুন</a>
-</nav>
-<section class="panel"><label for="prompt">Israfil AI-কে কী বলতে চাও?</label><textarea id="prompt" placeholder="যেমন: আমার বসকে একটি ভদ্র ইংরেজি ইমেইল লিখে দাও"></textarea><div class="actions"><button type="button" id="voice" class="secondary">🎙️ কথা বলুন</button><button type="button" id="copy">📋 কপি করুন</button><button type="button" id="ask">✨ ChatGPT-তে যান</button></div><div id="status" role="status" aria-live="polite"></div></section>
-<p class="note">গোপনীয়তা: এই অ্যাপ কোনো ইমেইল বা মেসেজ নিজে পড়ে না, পাঠায় না বা সংরক্ষণ করে না। Gmail, WhatsApp ও Facebook শুধু আলাদা ওয়েবসাইট হিসেবে খুলবে। ChatGPT-তে প্রশ্ন দিতে চাইলে আগে কপি করে সেখানে পেস্ট করো। Voice Input ব্রাউজার সমর্থন করলে কাজ করবে; iPhone Safari-তে নাও করতে পারে।</p>
+<body>
+<main class="shell">
+<header class="header"><div class="brand"><div class="mark">✦</div><div><h1>ISRAFIL JARVIS</h1><div class="sub">PERSONAL AI COMMAND CENTER</div></div></div><div class="live"><span class="dot"></span>AI CONNECTED</div></header>
+<div class="layout">
+<section class="panel welcome"><div class="eyebrow">WELCOME TO YOUR AI WORLD</div><h2>আসসালামু আলাইকুম! 👋</h2><p class="muted">তোমার Personal JARVIS Dashboard প্রস্তুত। বাংলায় বা ইংরেজিতে প্রশ্ন করো, Voice Input ব্যবহার করো এবং AI-এর উত্তর শুনো।</p><div class="pill">✦ Powered by your Cloudflare AI Worker</div></section>
+<section class="panel center"><div class="eyebrow">SYSTEM CLOCK</div><div class="orb" aria-hidden="true">◈</div><div id="clock" class="clock">--:--:--</div><div id="date" class="date">Loading date...</div></section>
+<section class="panel chat"><h2 class="section-title">⚡ JARVIS AI CHAT</h2><div id="messages" class="messages" aria-live="polite"><div class="bubble system">JARVIS প্রস্তুত। নিচে তোমার প্রশ্ন লেখো।</div></div><label for="prompt">তোমার প্রশ্ন</label><textarea id="prompt" placeholder="যেমন: আমাকে একটি Professional English email লিখে দাও"></textarea><div class="actions"><button id="ask" type="button">✦ Ask JARVIS</button><button id="voice" class="secondary" type="button">🎙️ Voice Input</button><button id="speak" class="secondary" type="button">🔊 উত্তর শুনুন</button><button id="copy" class="secondary" type="button">📋 Copy Answer</button><button id="clear" class="secondary" type="button">🗑️ New Chat</button></div><div id="status" role="status" aria-live="polite"></div></section>
+</div>
+<section class="panel" style="margin-top:16px"><h2 class="section-title">🚀 QUICK ACCESS</h2><nav class="apps" aria-label="Quick links"><a class="app" href="https://mail.google.com/" target="_blank" rel="noopener noreferrer"><span>✉️</span>Gmail</a><a class="app" href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer"><span>💬</span>WhatsApp</a><a class="app" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><span>🌐</span>Facebook</a><a class="app" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer"><span>✨</span>ChatGPT</a></nav></section>
+<p class="note">Privacy: Gmail, WhatsApp, Facebook ও ChatGPT কেবল আলাদা লিংকে খোলে; JARVIS এগুলোর মেসেজ নিজে পড়তে বা পাঠাতে পারে না। AI প্রশ্ন Cloudflare Worker-এ পাঠানো হয়। App password এই HTML ফাইলে সংরক্ষিত নয়। Voice Input ও Speak সুবিধা ব্রাউজারের সমর্থনের ওপর নির্ভরশীল। New Chat বর্তমান পেজের কথোপকথন মুছে দেয়।</p>
 </main>
-
-
 <script>
-
-const WORKER_URL = 'https://srafil-ai-chat.israfilh1345.workers.dev/';
-
-const promptBox = document.getElementById('prompt');
-
-const status = document.getElementById('status');
-
-const askButton = document.getElementById('ask');
-
-askButton.textContent = '✨ Israfil AI-কে জিজ্ঞেস করুন';
-
-const answerBox = document.createElement('div');
-
-answerBox.style.cssText = 'white-space:pre-wrap;line-height:1.7;margin-top:16px;overflow-wrap:anywhere';
-
-answerBox.setAttribute('aria-live', 'polite');
-
-status.insertAdjacentElement('afterend', answerBox);
-
-document.getElementById('copy').onclick = async () => {
-
-  if (!promptBox.value.trim()) {
-
-    status.textContent = 'আগে কিছু লিখুন।';
-
-    return;
-
-  }
-
-  try {
-
-    await navigator.clipboard.writeText(promptBox.value);
-
-    status.textContent = 'প্রশ্ন কপি হয়েছে।';
-
-  } catch {
-
-    promptBox.select();
-
-    status.textContent = 'লেখাটি সিলেক্ট হয়েছে। Copy করুন।';
-
-  }
-
+'use strict';
+const WORKER_URL='https://srafil-ai-chat.israfilh1345.workers.dev/';
+const promptBox=document.getElementById('prompt');
+const askButton=document.getElementById('ask');
+const status=document.getElementById('status');
+const messages=document.getElementById('messages');
+let lastReply='';
+let history=[];
+function addMessage(role,content){const el=document.createElement('div');el.className='bubble '+role;el.textContent=content;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
+function updateClock(){const now=new Date();document.getElementById('clock').textContent=now.toLocaleTimeString('en-GB',{hour12:false});document.getElementById('date').textContent=now.toLocaleDateString('bn-BD',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}
+updateClock();setInterval(updateClock,1000);
+askButton.onclick=async()=>{
+ const message=promptBox.value.trim();if(!message){status.textContent='আগে প্রশ্ন লিখুন।';return;}
+ const password=window.prompt('Israfil AI App Password লিখুন:');if(password===null)return;
+ askButton.disabled=true;status.textContent='JARVIS উত্তর তৈরি করছে…';addMessage('user',message);
+ try{
+  const nextMessages=[...history,{role:'user',content:message}];
+  const response=await fetch(WORKER_URL.replace(/\/$/,'')+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json','X-App-Password':password},body:JSON.stringify({messages:nextMessages})});
+  const data=await response.json();if(!response.ok)throw new Error(data.error||'Server error: '+response.status);
+  if(typeof data.reply!=='string')throw new Error('Server-এর উত্তর ফরম্যাট মেলেনি।');
+  lastReply=data.reply;history=[...nextMessages,{role:'assistant',content:lastReply}];addMessage('ai',lastReply);status.textContent='JARVIS উত্তর দিয়েছে।';promptBox.value='';
+ }catch(error){addMessage('system','সমস্যা: '+error.message);status.textContent='Connection সমস্যা হয়েছে। আবার চেষ্টা করুন।';}
+ finally{askButton.disabled=false;}
 };
-
-
-askButton.onclick = async () => {
-  const message = promptBox.value.trim();
-
-  if (!message) {
-    status.textContent = 'আগে প্রশ্ন লিখুন।';
-    return;
-  }
-
-  const password = window.prompt('Israfil AI App Password লিখুন:');
-  if (password === null) return;
-
-  askButton.disabled = true;
-  status.textContent = 'AI উত্তর তৈরি করছে…';
-  answerBox.textContent = '';
-
-  try {
-    const response = await fetch(WORKER_URL.replace(/\/$/, '') + '/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-App-Password': password
-      },
-      body: JSON.stringify({
-        messages: [{ role: 'user', content: message }]
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Server error: ' + response.status);
-    }
-
-    if (typeof data.reply !== 'string') {
-      throw new Error('Server-এর উত্তর ফরম্যাট মেলেনি।');
-    }
-
-    answerBox.textContent = data.reply;
-    status.textContent = 'উত্তর পাওয়া গেছে।';
-
-  } catch (error) {
-    status.textContent = 'সমস্যা: ' + error.message;
-  } finally {
-    askButton.disabled = false;
-  }
-};
-
-
-const SpeechRecognition =
-
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-
-const voice = document.getElementById('voice');
-
-if (!SpeechRecognition) {
-
-  voice.disabled = true;
-
-  voice.title = 'Voice Input সমর্থিত নয়';
-
-} else {
-
-  voice.onclick = () => {
-
-    try {
-
-      const rec = new SpeechRecognition();
-
-      rec.lang = 'bn-BD';
-
-      rec.interimResults = false;
-
-      rec.onresult = e => {
-
-        promptBox.value +=
-
-          (promptBox.value ? ' ' : '') + e.results[0][0].transcript;
-
-        status.textContent = 'কথা লেখা হয়েছে।';
-
-      };
-
-      rec.onerror = e => {
-
-        status.textContent = 'ভয়েস সমস্যা: ' + e.error;
-
-      };
-
-      rec.start();
-
-      status.textContent = 'শুনছি…';
-
-    } catch {
-
-      status.textContent = 'ভয়েস চালু করা যায়নি।';
-
-    }
-
-  };
-
-}
-
-</script></body></html>
+document.getElementById('copy').onclick=async()=>{if(!lastReply){status.textContent='আগে AI-এর উত্তর নিন।';return;}try{await navigator.clipboard.writeText(lastReply);status.textContent='উত্তর কপি হয়েছে।';}catch{status.textContent='Copy করা যায়নি।';}};
+document.getElementById('clear').onclick=()=>{history=[];lastReply='';messages.innerHTML='';addMessage('system','নতুন Chat শুরু হয়েছে।');status.textContent='';if('speechSynthesis'in window)window.speechSynthesis.cancel();};
+document.getElementById('speak').onclick=()=>{if(!lastReply){status.textContent='আগে AI-এর উত্তর নিন।';return;}if(!('speechSynthesis'in window)){status.textContent='এই ব্রাউজারে Speak সমর্থিত নয়।';return;}window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(lastReply);utterance.lang=/[\u0980-\u09FF]/.test(lastReply)?'bn-BD':'en-US';utterance.rate=0.95;window.speechSynthesis.speak(utterance);status.textContent='উত্তর পড়ে শোনাচ্ছি…';};
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+const voice=document.getElementById('voice');
+if(!SpeechRecognition){voice.disabled=true;voice.title='এই ব্রাউজারে Voice Input সমর্থিত নয়';}else{voice.onclick=()=>{try{const rec=new SpeechRecognition();rec.lang='bn-BD';rec.interimResults=false;rec.onresult=e=>{promptBox.value+=(promptBox.value?' ':'')+e.results[0][0].transcript;status.textContent='কথা লেখা হয়েছে।';};rec.onerror=e=>{status.textContent='ভয়েস সমস্যা: '+e.error;};rec.start();status.textContent='শুনছি…';}catch{status.textContent='ভয়েস চালু করা যায়নি।';}};}
+</script>
+</body>
+</html>
