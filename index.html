@@ -53,6 +53,23 @@
   </div>
 </section>
 
+
+<section class="panel" id="smart-agent-brain" style="margin-top:16px">
+  <div class="eyebrow">ISRAFIL AGENT • SMART BRAIN V3</div>
+  <h2 class="section-title" style="margin-top:8px">🧩 পরিকল্পনা, অগ্রগতি ও রিপোর্ট</h2>
+  <p class="muted">Agent-এর কাছ থেকে ধাপে ধাপে পরিকল্পনা নাও, প্রতিটি ধাপ শেষ হলে চিহ্ন দাও, তারপর অগ্রগতির রিপোর্ট তৈরি করো।</p>
+  <div class="actions"><button id="makePlan" type="button">🧠 AI Plan তৈরি করো</button></div>
+  <label for="planSteps" style="margin-top:14px">AI-এর তৈরি পরিকল্পনার ধাপগুলো এখানে পেস্ট করো (প্রতি লাইনে একটি ধাপ)</label>
+  <textarea id="planSteps" placeholder="১. প্রথম কাজ
+২. দ্বিতীয় কাজ
+৩. তৃতীয় কাজ"></textarea>
+  <div class="actions"><button id="buildTracker" type="button">📋 Progress Tracker তৈরি</button><button id="clearTracker" class="secondary" type="button">Reset Tracker</button></div>
+  <div id="trackerArea" style="margin-top:14px"></div>
+  <div id="progressText" class="note" aria-live="polite">এখনো কোনো Progress Tracker তৈরি হয়নি।</div>
+  <div class="actions"><button id="makeReport" class="secondary" type="button">📄 Final Report তৈরি</button></div>
+  <p class="note">Progress চেকবক্সগুলো তুমি নিজে আপডেট করবে। Final Report তোমার দেওয়া ধাপের অবস্থা অনুযায়ী AI Chat-এ খসড়া হিসেবে তৈরি হবে; বাইরের কোনো কাজ স্বয়ংক্রিয়ভাবে সম্পন্ন হবে না।</p>
+</section>
+
 <section class="panel" style="margin-top:16px"><h2 class="section-title">🚀 QUICK ACCESS</h2><nav class="apps" aria-label="Quick links"><a class="app" href="https://mail.google.com/" target="_blank" rel="noopener noreferrer"><span>✉️</span>Gmail</a><a class="app" href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer"><span>💬</span>WhatsApp</a><a class="app" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><span>🌐</span>Facebook</a><a class="app" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer"><span>✨</span>ChatGPT</a></nav></section>
 <p class="note">Voice Conversation চালু করলে Recording শেষ হওয়ার পর কথাটি AI Chat-এ পাঠানো হয় এবং AI-এর উত্তর স্বয়ংক্রিয়ভাবে পড়ে শোনানো হয়। iPhone-এ পরের কথা বলার জন্য আবার Voice Input চাপতে হবে; এটি সবসময় চালু থাকা hands-free microphone নয়। Privacy: Gmail, WhatsApp, Facebook ও ChatGPT কেবল আলাদা লিংকে খোলে; JARVIS এগুলোর মেসেজ নিজে পড়তে বা পাঠাতে পারে না। AI প্রশ্ন Cloudflare Chat Worker-এ পাঠানো হয়। Voice Recording Cloudflare Voice Worker-এ transcription-এর জন্য পাঠানো হয়। Password HTML ফাইলে সংরক্ষিত নয়। Speak সুবিধা ব্রাউজারের সমর্থনের ওপর নির্ভরশীল। New Chat বর্তমান পেজের কথোপকথন মুছে দেয়।</p>
 </main>
@@ -132,6 +149,47 @@ document.getElementById('searchAgent').onclick=()=>{
  if(!q){status.textContent='আগে Search করার বিষয় লিখুন।';agentTask.focus();return;}
  window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank','noopener');
  status.textContent='Web Search নতুন ট্যাবে খোলা হয়েছে। ফলাফল নিজে যাচাই করুন।';
+};
+
+// Smart Agent Brain V3: planning prompt + user-controlled progress + report draft.
+const planStepsBox=document.getElementById('planSteps');
+const trackerArea=document.getElementById('trackerArea');
+const progressText=document.getElementById('progressText');
+let trackerItems=[];
+document.getElementById('makePlan').onclick=()=>{
+ const task=(agentTask.value||'').trim();
+ if(!task){status.textContent='আগে Action Center-এ কাজটি লিখুন।';agentTask.focus();return;}
+ promptBox.value='তুমি Israfil JARVIS Smart Agent Brain। নিচের কাজটির জন্য ৪ থেকে ৮টি বাস্তবসম্মত, ছোট, ক্রমানুসারী ধাপ তৈরি করো। শুধু numbered list দাও; প্রতিটি লাইনে একটি কাজ থাকবে। ঝুঁকিপূর্ণ বা বাইরের কাজ হলে প্রয়োজনীয় অনুমতি ও ব্যবহারকারীর নিজে করার বিষয় উল্লেখ করো। কাজ: '+task;
+ document.getElementById('smart-agent-brain').scrollIntoView({behavior:'smooth',block:'center'});
+ askButton.click();
+ status.textContent='AI Chat-এ পরিকল্পনা চাওয়া হয়েছে। উত্তর থেকে numbered steps কপি করে নিচের ঘরে পেস্ট করো।';
+};
+function updateTracker(){
+ const done=trackerItems.filter(x=>x.done).length;
+ const total=trackerItems.length;
+ const percent=total?Math.round(done/total*100):0;
+ progressText.textContent=total?`অগ্রগতি: ${done}/${total} ধাপ সম্পন্ন (${percent}%)`:'এখনো কোনো Progress Tracker তৈরি হয়নি।';
+}
+document.getElementById('buildTracker').onclick=()=>{
+ const lines=(planStepsBox.value||'').split(/\n/).map(x=>x.replace(/^\s*(?:[-*•]|\d+[.)、])\s*/, '').trim()).filter(Boolean);
+ if(!lines.length){status.textContent='প্রতি লাইনে একটি করে পরিকল্পনার ধাপ পেস্ট করুন।';planStepsBox.focus();return;}
+ trackerItems=lines.map(label=>({label,done:false}));
+ trackerArea.replaceChildren();
+ trackerItems.forEach((item,index)=>{
+  const row=document.createElement('label');row.style.cssText='display:flex;gap:10px;align-items:flex-start;padding:11px;margin:7px 0;border:1px solid #294e69;border-radius:12px;background:#0b2137';
+  const check=document.createElement('input');check.type='checkbox';check.style.cssText='width:19px;height:19px;flex:0 0 auto;margin-top:2px;accent-color:#18c7a0';
+  const span=document.createElement('span');span.textContent=(index+1)+'. '+item.label;span.style.cssText='font-size:14px;line-height:1.5';
+  check.addEventListener('change',()=>{item.done=check.checked;span.style.textDecoration=check.checked?'line-through':'none';span.style.opacity=check.checked?'.65':'1';updateTracker();});
+  row.append(check,span);trackerArea.append(row);
+ });
+ updateTracker();status.textContent='Progress Tracker তৈরি হয়েছে। কাজ শেষ হলে checkbox-এ টিক দাও।';
+};
+document.getElementById('clearTracker').onclick=()=>{trackerItems=[];trackerArea.replaceChildren();updateTracker();status.textContent='Tracker reset করা হয়েছে।';};
+document.getElementById('makeReport').onclick=()=>{
+ if(!trackerItems.length){status.textContent='আগে পরিকল্পনার ধাপ দিয়ে Progress Tracker তৈরি করুন।';return;}
+ const done=trackerItems.filter(x=>x.done),pending=trackerItems.filter(x=>!x.done);
+ const reportTask='নিচের তথ্য দিয়ে একটি পরিষ্কার Final Progress Report তৈরি করো। সম্পন্ন কাজ ও বাকি কাজ আলাদা করো, অগ্রগতির শতাংশ দেখাও, পরবর্তী করণীয় দাও। এটি শুধু রিপোর্টের খসড়া হবে।\nমূল কাজ: '+(agentTask.value.trim()||'উল্লেখ করা হয়নি')+'\nমোট ধাপ: '+trackerItems.length+'\nসম্পন্ন ('+done.length+'): '+(done.map(x=>x.label).join('; ')||'কোনোটি নয়')+'\nবাকি ('+pending.length+'): '+(pending.map(x=>x.label).join('; ')||'কোনোটি নেই')+'\nঅগ্রগতি: '+Math.round(done.length/trackerItems.length*100)+'%';
+ promptBox.value=reportTask;document.getElementById('smart-agent-brain').scrollIntoView({behavior:'smooth',block:'center'});askButton.click();
 };
 
 askButton.onclick=async()=>{
